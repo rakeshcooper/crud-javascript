@@ -4,6 +4,9 @@ let uform = document.querySelector(".update-form");
 let input1 = document.querySelector(".input-1");
 let input2 = document.querySelector(".input-2");
 let formSubmittedData = [];
+let items = [];
+
+let currentFormItem = -1;
 
 const handleSubmit = (event) => {
   event.preventDefault();
@@ -18,14 +21,17 @@ const handleSubmit = (event) => {
     };
 
     formSubmittedData.unshift(obj);
+    items = [];
     console.log("form-submitted");
 
     pList.innerHTML = "";
     formSubmittedData.forEach((data, index) => {
       let list = document.createElement("li");
       list.classList.add("nodeList");
-      list.innerHTML = `<p><span>${data.title}</span><span>${data.desc}</span><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`;
+
+      list.innerHTML = `<p><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`;
       pList.appendChild(list);
+      items.push(list);
     });
 
     let nodeList = document.querySelectorAll(".nodeList");
@@ -42,9 +48,8 @@ const handleSubmit = (event) => {
 };
 function edit(nodeListedit, modify1, modify2) {
   nodeListedit.forEach((listedit, index) => {
-    console.log(index);
-
     listedit.addEventListener("click", () => {
+      currentFormItem = index;
       listedit.style.backgroundColor = "purple";
       modify1.value = "Edit";
       modify2.value = "Here";
@@ -80,18 +85,39 @@ function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
 forms.addEventListener("submit", handleSubmit);
 
 const updateSubmit = (event) => {
-  event.preventDefault();
-  // event.stopPropagation();
-  let formData = new FormData(event.currentTarget);
-  let obj = {
-    title: formData.get("mtitle"),
-    desc: formData.get("mdesc"),
-  };
+  if (currentFormItem >= 0) {
+    event.preventDefault();
+    // event.stopPropagation();
+    let formData = new FormData(event.currentTarget);
+    formSubmittedData[currentFormItem].title = formData.get("mtitle");
+    formSubmittedData[currentFormItem].desc = formData.get("mdesc");
+    let obj = {
+      title: formData.get("mtitle"),
+      desc: formData.get("mdesc"),
+    };
 
-  // formSubmittedData.splice(index, 1, obj)
+    console.log(
+      "Update the item with index -> ",
+      currentFormItem,
+      " ",
+      Date.now(),
+    );
 
-  console.log(formSubmittedData);
-  // dispatchEvent(event);
+    const element = items[currentFormItem];
+
+    const titleElement = element.querySelector(".title");
+    titleElement.innerText = obj.title;
+
+    const descriptionElement = element.querySelector(".description");
+    descriptionElement.innerText = obj.desc;
+  } else {
+    throw new Error("No current item selected!");
+  }
 };
 
 uform.addEventListener("submit", updateSubmit);
+
+document.getElementById("httpSubmit").addEventListener("click", (e) => {
+  e.preventDefault;
+  console.log(formSubmittedData);
+});
