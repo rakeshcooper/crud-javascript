@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    button{
+        cursor: pointer;
+    }
+
+    .error{
+        display: none;
+    }
+    
+    .edit-input{
+        display: none;
+    }
+
+    .done{
+        display: none;
+    }
+
+    .parentModify{
+        display: none;
+    }
+
+    .toggleShow{
+        display: block;
+    }
+
+</style>
+<body>
+    <div>
+        <form id="form">
+            <label for="list">create to add</label><br>
+            <input type="text" id="list" name="list" class="list">
+            <button type="submit" class="add">Submit</button>
+            <h3 class="error"> Please add your work before submits</h3>
+            <ul class="list-item">
+                <!-- <li class="list-node"><span>Eat</span><input type="text" class="edit-input"><span><button class="edit-ok">Edit</button><button class="done">Done</button></span></span></li>
+                <li class="list-node">sleep</li> -->
+            </ul>
+            <ul class="list2">
+
+            </ul>        
+        </form>
+        
+        
+    </div>
+</body>
+<script>
+    const form =  document.getElementById("form")
+   
+    let list = document.querySelector(".list")
+    let items = document.querySelector(".list-item")
+    let add = document.querySelector(".add")
+    let error = document.querySelector(".error")
+    let submittedFormData = [];
+    
+        // Function to handle form submission
+        const handleSubmit = (event) => {
+            // Prevent default form submission behavior
+            event.preventDefault();
+            //
+            let listValue = list.value;
+        let li = document.createElement("li")
+        li.classList.add("list-node");
+        let datavalue = document.createElement('span')
+        li.appendChild(datavalue)
+        datavalue.textContent = listValue;
+
+    
+        let modify = document.createElement("input")
+        modify.type = "text";
+        modify.classList.add('edit-input');
+        // li.textContent = listValue;
+        li.appendChild(modify)
+        let span = document.createElement('span')
+        li.appendChild(span)
+        let okBtnElement = document.createElement("button")
+        okBtnElement.textContent = 'Edit'
+        okBtnElement.classList.add("edit-ok")
+        span.appendChild(okBtnElement)
+        let doneElement = document.createElement("button")
+        doneElement.textContent = 'Done'
+        doneElement.classList.add("done")
+        span.appendChild(doneElement)
+        console.log(okBtnElement);
+        let deleteElement = document.createElement("button")
+        deleteElement.textContent = 'Delete'
+        deleteElement.classList.add("delete")
+        span.appendChild(deleteElement)
+        console.log(okBtnElement);
+       
+        console.log(li.textContent); 
+         if(listValue.length <= 0){
+            error.style.display = "block"
+            return false
+         } else{
+            error.style.display = "none"
+            items.appendChild(li)
+         }
+
+            // Get the form element
+            const form = event.target;
+            
+            let formdata = new FormData(form)
+            console.log(Object.fromEntries(formdata));
+            let formEntrie = Object.fromEntries(formdata)
+            submittedFormData.push(formEntrie);
+            
+            // Optional: You can perform further processing or send the data to a server here
+            console.log('Form data submitted:', submittedFormData);
+            submittedFormData.map((fdata) => {
+                console.log("fdata "+fdata);
+            })
+            // console.log(submittedFormData[list.dataset]);
+            document.querySelector(".list").value = ""
+
+            let listNode = document.querySelectorAll(".list-item .list-node")
+            let editokBtn = document.querySelectorAll(".edit-ok")
+            let editInput = document.querySelectorAll(".edit-input")
+            let doneBtn = document.querySelectorAll(".done")
+            let deleteBtn = document.querySelectorAll(".delete")
+
+         editokBtn.forEach((edit,index) => {
+            edit.addEventListener("click", () =>{
+                modify.value = listValue
+                console.log(modify.value);
+                editInput[index].classList.toggle("toggleShow")
+                doneBtn[index].classList.toggle("toggleShow")
+            })
+         })
+
+         doneBtn.forEach((done,index) => {
+            done.addEventListener("click", () =>{
+                listValue = modify.value
+                datavalue.textContent = listValue;
+                submittedFormData.splice(index, 2 ,listValue)
+                editInput[index].classList.toggle("toggleShow")
+                doneBtn[index].classList.toggle("toggleShow")
+                console.log(submittedFormData);
+            })
+         })
+
+         deleteBtn.forEach((del,index) => {
+            del.addEventListener("click", () =>{
+                // listValue = modify.value
+                // datavalue.textContent = listValue;
+                submittedFormData.splice(index, 1)
+                // editInput[index].classList.toggle("toggleShow")
+                // doneBtn[index].classList.toggle("toggleShow")
+                console.log(submittedFormData);
+            })
+         })
+            
+        };
+
+    
+        // Add event listener for form submission
+        form.addEventListener('submit', handleSubmit);
+        // console.log(form.elements.length);
+
+        
+
+    
+</script>
+</html>

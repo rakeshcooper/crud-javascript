@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Array Entries</title>
+</head>
+<body>
+  <form id="entryForm">
+    <input type="text" id="inputKey" placeholder="Enter key" required>
+    <input type="text" id="inputValue" placeholder="Enter value" required>
+    <button type="submit">Add to Array</button>
+  </form>
+  <div id="arrayDisplay"></div>
+
+  <script>
+    // Initialize an empty array
+let myArray = [];
+let editIndex = -1; // Variable to store the index of the item being edited
+
+// Get references to the form and display area
+const entryForm = document.getElementById('entryForm');
+const arrayDisplay = document.getElementById('arrayDisplay');
+
+// Add event listener to the form
+entryForm.addEventListener('submit', (event) => {
+  // Prevent the default form submission behavior
+  event.preventDefault();
+
+  // Get the input key and value
+  const inputKey = entryForm.inputKey.value;
+  const inputValue = entryForm.inputValue.value;
+
+  // Only proceed if both key and value are provided
+  if (inputKey && inputValue) {
+    // Create an object with the input key and value
+    const myObject = {};
+    myObject[inputKey] = inputValue;
+
+    if (editIndex === -1) {
+      // Unshift the object to the front of the array
+      myArray.unshift(myObject);
+    } else {
+      // Update the existing object in the array
+      myArray[editIndex] = myObject;
+      editIndex = -1; // Reset editIndex
+    }
+
+    // Clear the input fields for new entries
+    entryForm.reset();
+
+    // Update the display
+    displayArray();
+  }
+});
+
+// Function to display the array in the DOM
+function displayArray() {
+  // Clear the current display
+  arrayDisplay.innerHTML = '';
+
+  // Create a list to display the array
+  const ul = document.createElement('ul');
+
+  // Iterate over the array and create list items for each object
+  myArray.forEach((obj, index) => {
+    const li = document.createElement('li');
+    const key = Object.keys(obj)[0];
+    const value = obj[key];
+    li.textContent = `${key}: ${value}`;
+
+    // Create an edit button
+    const editButton = document.createElement('button');
+    editButton.textContent = 'Edit';
+    editButton.addEventListener('click', () => {
+      // Populate the input fields with the current key and value
+      entryForm.inputKey.value = key;
+      entryForm.inputValue.value = value;
+      // Set the index of the item being edited
+      editIndex = index;
+    });
+
+    // Append the edit button to the list item
+    li.appendChild(editButton);
+    ul.appendChild(li);
+  });
+
+  // Append the list to the display area
+  arrayDisplay.appendChild(ul);
+}
+  </script>
+</body>
+</html>

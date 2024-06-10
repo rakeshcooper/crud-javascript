@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <div>
+    <form class="forms">
+        <label for="title">Title</label>
+        <input type="text" name="title" id="title" class="input-1">
+        <label for="desc">Description</label>
+        <input type="text" name="desc" id="desc" class="input-2">
+        <button type="submit">Add details</button>
+    </form>
+    <ul class="parent-list">
+       
+    </ul>
+   </div>
+
+   <script>
+        let pList = document.querySelector(".parent-list")
+        let forms = document.querySelector(".forms")
+        let input1 = document.querySelector(".input-1")
+        let input2 = document.querySelector(".input-2")
+        let formSubmittedData = []
+
+        const handleSubmit = (event) =>{
+            
+            event.preventDefault()
+            if(input1.value.length <= 0 || input2.value.length <= 0){
+                console.log(input1.value.length);
+                alert("add details in both the field")
+            } else {
+                let formData = new FormData(event.currentTarget);
+                let obj = {
+                    title: formData.get("title"),
+                    desc: formData.get("desc")
+                }
+
+                formSubmittedData.unshift(obj)
+                console.log("form-submitted");
+
+                // console.log(formSubmittedData);
+                // pList.innerHTML = "";
+                // formSubmittedData.forEach((data)=>{
+                //     console.log(data);
+                //     // console.log(list);
+                //     pList.innerHTML += ` <li><p><span>${data.title}</span><span>${data.desc}</span><button>Edit</button><button>done</button></p></li>`
+                // })
+                // pList.append(list)
+                
+                pList.innerHTML = "";
+                formSubmittedData.forEach((data,index)=>{
+                let list = document.createElement("li")
+                list.classList.add("nodeList")
+                list.innerHTML = `<p><span>${data.title}</span><input type="text" name="mtitle" id="mtitle" class="modify-1"><span>${data.desc}</span><input type="text" name="mdesc" id="mdesc" class="modify-2"><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`
+                pList.appendChild(list)
+                })
+
+                let nodeList = document.querySelectorAll(".nodeList")
+                let nodeListedit = document.querySelectorAll(".nodeList .edit")
+                let nodeListdone = document.querySelectorAll(".nodeList .done")
+                let nodeListdel = document.querySelectorAll(".nodeList .delete")
+                let modify1 = document.querySelectorAll(".modify-1")
+                let modify2 = document.querySelectorAll(".modify-2")
+                edit(nodeListedit, modify1, modify2)
+                done(nodeListdone , modify1, modify2, formSubmittedData, nodeList, pList)
+                deleteList(nodeListdel, formSubmittedData, nodeList, pList)
+                console.log(formSubmittedData);
+            }
+        }
+            function edit( nodeListedit, modify1, modify2){
+                    nodeListedit.forEach((listedit, index) => {
+                    console.log(index);
+                     
+                    listedit.addEventListener("click",() => {
+                        listedit.style.backgroundColor = "purple";
+                        modify1[index].value = "Edit"
+                        modify2[index].value = "Here"
+                    })
+                })    
+            }
+
+            function done(nodeListdone, modify1, modify2, formSubmittedData, nodeList, pList){
+                nodeListdone.forEach((listdone, index) => {
+                    console.log(index);
+                    listdone.addEventListener("click",() => {
+                        listdone.style.backgroundColor = "purple";
+                        // console.log( modify1[index].value + modify2[index].value);
+                        let obj = {
+                            title: modify1[index].value,
+                            desc: modify2[index].value
+                        }
+                        formSubmittedData.splice(index, 1, obj)
+                        console.log("After-Edited :" + formSubmittedData);
+                        console.log("pList index :"+nodeList[index].innerHTML);
+                        // nodeList[index].innerHTML = ""
+                        nodeList[index].innerHTML = `<p><span>${modify1[index].value}</span><input type="text" name="mtitle" id="mtitle" class="modify-1"><span>${modify2[index].value}</span><input type="text" name="mdesc" id="mdesc" class="modify-2"><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`
+                    })
+                })
+            }
+
+            function deleteList(nodeListdel, formSubmittedData, nodeList, pList){
+                    nodeListdel.forEach((listdel, index) => {
+                     
+                        listdel.addEventListener("click",() => {
+                            listdel.style.backgroundColor = "purple";
+                            formSubmittedData.splice(index, 1)
+                            console.log("After-Deleted :" + formSubmittedData + 'index :' + index);
+                            pList.removeChild(nodeList[index])
+                    })
+                })    
+            }
+
+            function handleFormSubmission(event, index) {
+                // event.preventDefault();
+                // forms.submit();
+                // nodeList[index].innerHTML = `<p><span>${modify1[index].value}</span><input type="text" name="mtitle" id="mtitle" class="modify-1"><span>${modify2[index].value}</span><input type="text" name="mdesc" id="mdesc" class="modify-2"><button class="edit">Edit</button><button class="done">done</button></p>`
+            }
+            forms.addEventListener("submit", handleSubmit)
+   </script>
+</body>
+</html>

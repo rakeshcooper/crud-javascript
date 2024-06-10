@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        label[for="book"], [for="desc"] {
+            cursor: pointer;
+        }
+        input, button {
+            cursor: pointer;
+        }
+        .input-1, .input-2 {
+            display: block;
+        }
+        .edit {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <form class="form">
+        <label for="book">Book Title</label>
+        <input type="text" class="input-1" name="book" id="book">
+        <label for="desc">Add desc</label>
+        <input type="text" class="input-2" name="desc" id="desc">
+        <button type="submit">Add</button>
+        <ul class="parent-list"></ul>
+    </form>
+    <script>
+        const form = document.querySelector(".form");
+        const plist = document.querySelector(".parent-list");
+        const input1 = document.querySelector(".input-1");
+        const input2 = document.querySelector(".input-2");
+        let submittedFormData = [];
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            if (input1.value.length > 0 && input2.value.length > 0) {
+                let formdata = new FormData(form);
+                let formEntrie = Object.fromEntries(formdata);
+                submittedFormData.push(formEntrie);
+                addListItem(formEntrie);
+                input1.value = "";
+                input2.value = "";
+            } else {
+                alert("Add details in both fields");
+            }
+        });
+
+        function addListItem(data) {
+            let list = document.createElement('li');
+            let editbtn = document.createElement("button");
+
+            list.innerHTML = `
+                <p>${data.book} <span><input class="modify-1" type="text" style="display:none;"></span></p>
+                <p>${data.desc} <span><input class="modify-2" type="text" style="display:none;"></span></p>
+            `;
+            list.classList.add("list");
+
+            list.onclick = () => {
+                removeActive();
+                list.style.backgroundColor = "green";
+            };
+
+            editbtn.textContent = "Edit";
+            editbtn.classList.add("edit");
+            editbtn.onclick = () => {
+                const modifyInputs = list.querySelectorAll('.modify-1, .modify-2');
+                modifyInputs.forEach(input => input.style.display = 'block');
+                list.querySelectorAll('p').forEach(p => p.style.display = 'none');
+                editbtn.textContent = "Save";
+                editbtn.onclick = () => saveEdits(list, data, modifyInputs, editbtn);
+            };
+
+            list.appendChild(editbtn);
+            plist.append(list);
+        }
+
+        function saveEdits(list, data, modifyInputs, editbtn) {
+            data.book = modifyInputs[0].value;
+            data.desc = modifyInputs[1].value;
+            list.querySelector('p').innerHTML = `<p>${data.book}</p>`;
+            list.querySelectorAll('p')[1].innerHTML = `<p>${data.desc}</p>`;
+            modifyInputs.forEach(input => input.style.display = 'none');
+            list.querySelectorAll('p').forEach(p => p.style.display = 'block');
+            editbtn.textContent = "Edit";
+            editbtn.onclick = () => editItem(list, data, modifyInputs, editbtn);
+        }
+
+        function editItem(list, data, modifyInputs, editbtn) {
+            // const modifyInputs = list.querySelectorAll('.modify-1, .modify-2');
+            modifyInputs.forEach(input => input.style.display = 'block');
+            list.querySelectorAll('p').forEach(p => p.style.display = 'none');
+            editbtn.textContent = "Save";
+            editbtn.onclick = () => saveEdits(list, data, modifyInputs, editbtn);
+        }
+
+        function removeActive() {
+            let nodelist = document.querySelectorAll(".list");
+            nodelist.forEach(li => {
+                li.style.backgroundColor = "";
+            });
+        }
+    </script>
+</body>
+</html>

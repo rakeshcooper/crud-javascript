@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    label[for="book"],[for="desc"]{
+        cursor: pointer;
+    }
+
+    input,button{
+        cursor: pointer;
+    }
+    .input-1, .input-2{
+        display: block;
+    }
+
+    .edit{
+        cursor: pointer;
+    }
+</style>
+<body>
+    <form class="forms">
+        <label for="book">Book Title</label>
+        <input type="text" name="book" id="book">
+        <label for="desc">Add desc</label>
+        <input type="text"  name="desc" id="desc">
+        <button type="submit">Add</button>
+        <ul class="parent-list">
+        </ul>
+        <!-- <button class="edit">Edit</button><button>Done</button> -->
+    </form>
+    <script>
+        let forms = document.querySelector(".forms")
+        let pList = document.querySelector(".parent-list")
+        let input1  = document.querySelector(".input-1")
+        let input2  = document.querySelector(".input-2")
+        let edit = document.querySelectorAll(".edit")
+        let submittedFormData = [];
+
+        
+        forms.addEventListener("submit", (event, index)=> {
+            event.preventDefault()
+
+            // if(input1.value.length <= 0 || input2.value.length <= 0){
+            //     console.log(input1.value.length);
+            //     alert("add details in both the field")
+            // } else {
+                // let formdata = new FormData(form)
+                // console.log(Object.fromEntries(formdata));
+                // let formEntrie = Object.fromEntries(formdata)
+                // submittedFormData.unshift(formEntrie);
+
+                let formData = new FormData(event.currentTarget);
+                let obj = {
+                title: formData.get("book"),
+                desc: formData.get("desc")
+                }
+
+                submittedFormData.unshift(obj)
+                console.log(submittedFormData);
+                
+            // }
+
+            // pList.innerHTML = "";
+            // submittedFormData.forEach((data,index)=>{
+            // let list = document.createElement('li')
+            // list.innerHTML = `<p>${data.book}<span><input class="modify-1" type="text"></p>
+            // <p>${data.desc}<span><input class="modify-2" type="text"><button>edit</button></p>`; 
+
+                pList.innerHTML = "";
+                submittedFormData.forEach((data)=>{
+                let list = document.createElement("li")
+                list.classList.add("list")
+                list.innerHTML = `<p><span>${data.book}</span><span>${data.desc}</span><button class="edit">Edit</button><button>done</button></p>`
+                pList.append(list)
+                // list.onclick = ()=> {
+                // removeActive()
+                // list.style.backgroundColor = "green"    
+                // } 
+            })            
+        })
+
+
+            // function removeActive(){
+            //     let nodelist = document.querySelectorAll(".list")
+            //     nodelist.forEach(li =>{
+            //     console.log(li);
+            //     li.style.backgroundColor = ""
+            //     })
+            // }
+
+
+       
+       
+        // let modify1 = document.querySelectorAll(".modify-1")
+        // let modify2 = document.querySelectorAll(".modify-2")
+        // let editbtn = document.querySelectorAll(".edit") 
+        // editbtn.forEach((edit,index) => {
+        //     edit.addEventListener("click", () =>{
+        //         console.log("edit-clicked");
+        //     })
+        //  })
+
+    //   let nodelist = document.querySelectorAll(".list")
+    //   let span = document.createElement("span")
+    //   nodelist.forEach(li =>{
+    //             console.log(li);
+    //             li.appendChild(span)
+    //             })
+
+    
+
+        
+        
+    //     let array = [{name: "Cooper", age: 25},{name: "Adam", age: 22}]
+    //     array.sort()
+    //     const myObject = {
+    //         name: "Veera",
+    //         age: 26
+    //     }
+    //     array.unshift(myObject)
+    //     newActive(array);
+    //     function newActive(fdata){
+        
+    //     fdata.map((data,index)=>{
+    //         let list = document.createElement('li') 
+    //         list.innerHTML = `<p>${data.name}</p>`;
+    //         plist.appendChild(list) 
+    //         // console.log(data);
+    //         list.classList.add("list")
+    //         list.onclick = ()=> {
+    //             removeActive()
+    //             list.style.backgroundColor = "green"    
+    //             }
+                 
+    //         })
+
+    //     function removeActive(){
+    //         let nodelist = document.querySelectorAll(".list")
+    //         nodelist.forEach(li =>{
+    //         console.log(li);
+    //         li.style.backgroundColor = ""
+    //         })
+    //         }
+    //   }
+        
+    </script>
+</body>
+</html>
