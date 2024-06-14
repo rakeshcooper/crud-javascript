@@ -96,6 +96,8 @@ const updateSubmit = (event) => {
       desc: formData.get("mdesc"),
     };
 
+    console.log(currentFormItem);
+
     console.log(
       "Update the item with index -> ",
       currentFormItem,
