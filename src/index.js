@@ -121,5 +121,5 @@ uform.addEventListener("submit", updateSubmit);
 
 document.getElementById("httpSubmit").addEventListener("click", (e) => {
   e.preventDefault;
-  console.log(formSubmittedData);
+  console.log("updated data" + formSubmittedData);
 });
