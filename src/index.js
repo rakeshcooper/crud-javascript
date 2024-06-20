@@ -36,12 +36,10 @@ const handleSubmit = (event) => {
 
     let nodeList = document.querySelectorAll(".nodeList");
     let nodeListedit = document.querySelectorAll(".nodeList .edit");
-    let nodeListdone = document.querySelectorAll(".nodeList .done");
     let nodeListdel = document.querySelectorAll(".nodeList .delete");
     let modify1 = document.querySelector(".modify-1");
     let modify2 = document.querySelector(".modify-2");
     edit(nodeListedit, modify1, modify2);
-    // done(nodeListdone , modify1, modify2, formSubmittedData, nodeList, pList)
     deleteList(nodeListdel, formSubmittedData, nodeList, pList);
     console.log(formSubmittedData);
   }
@@ -57,27 +55,17 @@ function edit(nodeListedit, modify1, modify2) {
   });
 }
 
-// function done(nodeListdone, modify1, modify2, formSubmittedData, nodeList, pList){
-//     nodeListdone.forEach((listdone, index) => {
-//         console.log(index);
-//         listdone.addEventListener("click",() => {
-//             listdone.style.backgroundColor = "purple";
-//             formSubmittedData.splice(index, 1, obj)
-
-//             // triggerFormSubmit('action1', nodeList, index);
-//             console.log("After-Edited :" + formSubmittedData);
-//         })
-//     })
-// }
 
 function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
   nodeListdel.forEach((listdel, index) => {
     listdel.addEventListener("click", () => {
       listdel.style.backgroundColor = "purple";
+      const element = nodeList[index]
+      console.log(element);
+      element.remove()
       formSubmittedData.splice(index, 1);
-      triggerFormSubmit("action1");
       console.log("After-Deleted :" + formSubmittedData + "index :" + index);
-      // pList.removeChild(nodeList[index])
+      
     });
   });
 }
@@ -87,7 +75,6 @@ forms.addEventListener("submit", handleSubmit);
 const updateSubmit = (event) => {
   if (currentFormItem >= 0) {
     event.preventDefault();
-    // event.stopPropagation();
     let formData = new FormData(event.currentTarget);
     formSubmittedData[currentFormItem].title = formData.get("mtitle");
     formSubmittedData[currentFormItem].desc = formData.get("mdesc");
