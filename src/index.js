@@ -5,6 +5,7 @@ let input1 = document.querySelector(".input-1");
 let input2 = document.querySelector(".input-2");
 let formSubmittedData = JSON.parse(localStorage.getItem("Data") ?? "[]")
 let items = [];
+let newData = []
 render(formSubmittedData);
 
 
@@ -17,8 +18,7 @@ const handleSubmit = (event) => {
     alert("add details in both the field");
   } else {
     let formData = Object.fromEntries(new FormData(event.currentTarget));
-    formData["isDone"] = false
-    console.log(formData);
+    formData["isDone"] = "false";
     // let obj = {
     //   title: formData.get("title"),
     //   desc: formData.get("desc"),
@@ -26,6 +26,7 @@ const handleSubmit = (event) => {
     // };
 
     formSubmittedData.unshift(formData);
+    newData.unshift(formData)
     items = [];
     console.log("form-submitted");
     render(formSubmittedData);
@@ -39,17 +40,19 @@ function render(formSubmittedData){
     let list = document.createElement("li");
     list.classList.add("nodeList");
 
-    list.innerHTML = `<p><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`;
+    list.innerHTML = `<p><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><input class="done" type="checkbox"><button class="delete">delete</button></p>`;
     pList.appendChild(list);
     items.push(list);
   });
 
   let nodeList = document.querySelectorAll(".nodeList");
   let nodeListedit = document.querySelectorAll(".nodeList .edit");
+  let nodeListdone = document.querySelectorAll(".nodeList .done");
   let nodeListdel = document.querySelectorAll(".nodeList .delete");
   let modify1 = document.querySelector(".modify-1");
   let modify2 = document.querySelector(".modify-2");
   edit(nodeListedit, modify1, modify2);
+  done(nodeListdone, nodeList, newData);
   deleteList(nodeListdel, formSubmittedData, nodeList, pList);
   console.log(formSubmittedData);
   localStorage.setItem("Data",JSON.stringify(formSubmittedData))
@@ -64,6 +67,23 @@ function edit(nodeListedit, modify1, modify2) {
       modify2.value = "Here";
     });
   });
+}
+
+
+function done(nodeListdone, nodeList, newData) {
+  nodeListdone.forEach((listDone, index) => {
+    listDone.addEventListener('click',()=>{
+      // let isDone = formSubmittedData[index]["isDone"]
+      if(listDone.checked && formSubmittedData[index]["isDone"] == "true"){
+        formSubmittedData[index]["isDone"] = "true";
+        nodeList[index].style.textDecoration = "line-through"
+        console.log(formSubmittedData);
+        localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+      } else {
+        nodeList[index].style.textDecoration = ""
+      }
+    })
+  })
 }
 
 
