@@ -74,7 +74,8 @@ function done(nodeListdone, nodeList, newData) {
   nodeListdone.forEach((listDone, index) => {
     listDone.addEventListener('click',()=>{
       // let isDone = formSubmittedData[index]["isDone"]
-      if(listDone.checked && formSubmittedData[index]["isDone"] == "true"){
+      if(formSubmittedData[index]["isDone"] == "false" ){
+        listDone.checked
         formSubmittedData[index]["isDone"] = "true";
         nodeList[index].style.textDecoration = "line-through"
         console.log(formSubmittedData);
