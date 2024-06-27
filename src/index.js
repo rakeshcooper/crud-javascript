@@ -3,8 +3,9 @@ let forms = document.querySelector(".forms");
 let uform = document.querySelector(".update-form");
 let input1 = document.querySelector(".input-1");
 let input2 = document.querySelector(".input-2");
-let items = [];
 let formSubmittedData = JSON.parse(localStorage.getItem("Data") ?? "[]")
+let items = [];
+let newData = []
 render(formSubmittedData);
 
 
@@ -16,20 +17,46 @@ const handleSubmit = (event) => {
     console.log(input1.value.length);
     alert("add details in both the field");
   } else {
-    let formData = new FormData(event.currentTarget);
-    let obj = {
-      title: formData.get("title"),
-      desc: formData.get("desc"),
-      isDone: false
-    };
+    let formData = Object.fromEntries(new FormData(event.currentTarget));
+    // formData["isDone"] = false;
+    // let obj = {
+    //   title: formData.get("title"),
+    //   desc: formData.get("desc"),
+    //   isDone: false
+    // };
 
-    formSubmittedData.unshift(obj);
+    formSubmittedData.unshift(formData);
+    newData.unshift(formData)
     items = [];
     console.log("form-submitted");
     render(formSubmittedData);
     
   }
 };
+
+function render(formSubmittedData){
+  pList.innerHTML = "";
+  formSubmittedData.forEach((data, index) => {
+    let list = document.createElement("li");
+    list.classList.add("nodeList");
+    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><button class="delete">delete</button></p>`;
+    pList.appendChild(list);
+    items.push(list);
+  });
+
+  let nodeList = document.querySelectorAll(".nodeList");
+  let nodeListedit = document.querySelectorAll(".nodeList .edit");
+  let nodeListdone = document.querySelectorAll(".nodeList .done");
+  let nodeListdel = document.querySelectorAll(".nodeList .delete");
+  let modify1 = document.querySelector(".modify-1");
+  let modify2 = document.querySelector(".modify-2");
+  edit(nodeListedit, modify1, modify2);
+  done(nodeListdone, nodeList, newData);
+  deleteList(nodeListdel, formSubmittedData, nodeList, pList);
+  console.log(formSubmittedData);
+  localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+}
+
 function edit(nodeListedit, modify1, modify2) {
   nodeListedit.forEach((listedit, index) => {
     listedit.addEventListener("click", () => {
@@ -42,14 +69,39 @@ function edit(nodeListedit, modify1, modify2) {
 }
 
 
+function done(nodeListdone, nodeList, newData) {
+  nodeListdone.forEach((listDone, index) => {
+    listDone.addEventListener('change',(e)=>{
+      // let isDone = formSubmittedData[index]["isDone"]
+      console.log(e.target.checked);
+      console.log(formSubmittedData[index].isDone);
+      formSubmittedData[index]["isDone"] = !e.target.checked;
+      if(e.target.checked){
+        formSubmittedData[index].isDone = true  
+        listDone.parentElement.style.textDecoration = "line-through"     
+          console.log(formSubmittedData);
+        localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+      } else {
+        formSubmittedData[index].isDone = false
+        listDone.parentElement.style.textDecoration = ""
+        console.log(formSubmittedData);
+        localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+      }
+      // render(formSubmittedData);
+    })
+  })
+}
+
+
+
+
 function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
   nodeListdel.forEach((listdel, index) => {
     listdel.addEventListener("click", () => {
       listdel.style.backgroundColor = "purple";
       const element = nodeList[index]
       console.log(element);
-      // element.remove()
-      debugger
+      // debugger
       formSubmittedData.splice(index, 1);
       render(formSubmittedData);
       console.log("After-Deleted :" + formSubmittedData + "index :" + index);
@@ -58,27 +110,7 @@ function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
   });
 }
 
-function render(formSubmittedData){
-  pList.innerHTML = "";
-  formSubmittedData.forEach((data, index) => {
-    let list = document.createElement("li");
-    list.classList.add("nodeList");
 
-    list.innerHTML = `<p><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><button class="done">done</button><button class="delete">delete</button></p>`;
-    pList.appendChild(list);
-    items.push(list);
-  });
-
-  let nodeList = document.querySelectorAll(".nodeList");
-  let nodeListedit = document.querySelectorAll(".nodeList .edit");
-  let nodeListdel = document.querySelectorAll(".nodeList .delete");
-  let modify1 = document.querySelector(".modify-1");
-  let modify2 = document.querySelector(".modify-2");
-  edit(nodeListedit, modify1, modify2);
-  deleteList(nodeListdel, formSubmittedData, nodeList, pList);
-  console.log(formSubmittedData);
-  localStorage.setItem("Data",JSON.stringify(formSubmittedData))
-}
 
 forms.addEventListener("submit", handleSubmit);
 
