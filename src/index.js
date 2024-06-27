@@ -18,7 +18,7 @@ const handleSubmit = (event) => {
     alert("add details in both the field");
   } else {
     let formData = Object.fromEntries(new FormData(event.currentTarget));
-    formData["isDone"] = "false";
+    // formData["isDone"] = false;
     // let obj = {
     //   title: formData.get("title"),
     //   desc: formData.get("desc"),
@@ -40,7 +40,7 @@ function render(formSubmittedData){
     let list = document.createElement("li");
     list.classList.add("nodeList");
 
-    list.innerHTML = `<p><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><input class="done" type="checkbox"><button class="delete">delete</button></p>`;
+    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><button class="delete">delete</button></p>`;
     pList.appendChild(list);
     items.push(list);
   });
@@ -72,20 +72,28 @@ function edit(nodeListedit, modify1, modify2) {
 
 function done(nodeListdone, nodeList, newData) {
   nodeListdone.forEach((listDone, index) => {
-    listDone.addEventListener('click',()=>{
+    listDone.addEventListener('change',(e)=>{
       // let isDone = formSubmittedData[index]["isDone"]
-      if(formSubmittedData[index]["isDone"] == "false" ){
-        listDone.checked
-        formSubmittedData[index]["isDone"] = "true";
-        nodeList[index].style.textDecoration = "line-through"
-        console.log(formSubmittedData);
+      console.log(e.target.checked);
+      console.log(formSubmittedData[index].isDone);
+      formSubmittedData[index]["isDone"] = !e.target.checked;
+      if(e.target.checked){
+        formSubmittedData[index].isDone = true  
+        listDone.parentElement.style.textDecoration = "line-through"     
+          console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       } else {
-        nodeList[index].style.textDecoration = ""
+        formSubmittedData[index].isDone = false
+        listDone.parentElement.style.textDecoration = ""
+        console.log(formSubmittedData);
+        localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       }
+      // render(formSubmittedData);
     })
   })
 }
+
+
 
 
 function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
@@ -94,8 +102,7 @@ function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
       listdel.style.backgroundColor = "purple";
       const element = nodeList[index]
       console.log(element);
-      // element.remove()
-      debugger
+      // debugger
       formSubmittedData.splice(index, 1);
       render(formSubmittedData);
       console.log("After-Deleted :" + formSubmittedData + "index :" + index);
