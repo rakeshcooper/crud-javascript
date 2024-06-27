@@ -39,7 +39,6 @@ function render(formSubmittedData){
   formSubmittedData.forEach((data, index) => {
     let list = document.createElement("li");
     list.classList.add("nodeList");
-
     list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span class="title">${data.title}</span><span class="description">${data.desc}</span><button class="edit">Edit</button><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><button class="delete">delete</button></p>`;
     pList.appendChild(list);
     items.push(list);
