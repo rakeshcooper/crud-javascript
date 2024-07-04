@@ -1,3 +1,5 @@
+let ubtn = document.querySelector(".btn");
+let ucon = document.querySelector(".uf-conatiner");
 let pList = document.querySelector(".parent-list");
 let forms = document.querySelector(".forms");
 let uform = document.querySelector(".update-form");
@@ -60,10 +62,13 @@ function render(formSubmittedData){
 function edit(nodeListedit, modify1, modify2) {
   nodeListedit.forEach((listedit, index) => {
     listedit.addEventListener("click", () => {
+      console.log(uform);
       currentFormItem = index;
       listedit.style.backgroundColor = "purple";
-      modify1.value = "Edit";
+      modify1.value = "Update";
       modify2.value = "Here";
+      ucon.classList.add("u-show")
+      uform.classList.add("u-popup");
     });
   });
 }
@@ -143,7 +148,9 @@ const updateSubmit = (event) => {
     descriptionElement.innerText = obj.desc;
   } else {
     throw new Error("No current item selected!");
+    
   }
+  // uform.classList.remove("u-popup");
 };
 
 uform.addEventListener("submit", updateSubmit);
@@ -152,3 +159,8 @@ document.getElementById("httpSubmit").addEventListener("click", (e) => {
   e.preventDefault;
   console.log("updated data" + formSubmittedData);
 });
+
+// ubtn.addEventListener("click", () => {
+//   console.log("5");
+  
+// })
