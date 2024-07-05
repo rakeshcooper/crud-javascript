@@ -65,10 +65,10 @@ function edit(nodeListedit, modify1, modify2) {
       console.log(uform);
       currentFormItem = index;
       listedit.style.backgroundColor = "purple";
-      modify1.value = "Update";
-      modify2.value = "Here";
-      ucon.classList.add("u-show")
-      uform.classList.add("u-popup");
+      modify1.value = formSubmittedData[index].title;
+      modify2.value = formSubmittedData[index].desc;
+      uform.classList.add("u-show")
+      ucon.classList.add("u-popup");
     });
   });
 }
@@ -129,6 +129,7 @@ const updateSubmit = (event) => {
       title: formData.get("mtitle"),
       desc: formData.get("mdesc"),
     };
+    localStorage.setItem("Data",JSON.stringify(formSubmittedData))
 
     console.log(currentFormItem);
 
@@ -146,6 +147,8 @@ const updateSubmit = (event) => {
 
     const descriptionElement = element.querySelector(".description");
     descriptionElement.innerText = obj.desc;
+    uform.classList.remove("u-show")
+    ucon.classList.remove("u-popup");
   } else {
     throw new Error("No current item selected!");
     
