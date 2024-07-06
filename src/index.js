@@ -56,6 +56,7 @@ function render(formSubmittedData){
   done(nodeListdone, nodeList, newData);
   deleteList(nodeListdel, formSubmittedData, nodeList, pList);
   console.log(formSubmittedData);
+  statusCall(nodeList)
   localStorage.setItem("Data",JSON.stringify(formSubmittedData))
 }
 
@@ -86,7 +87,8 @@ function done(nodeListdone, nodeList, newData) {
         formSubmittedData[index].isDone = true  
         listDone.parentElement.style.textDecoration = "line-through"
         des[index].style.textDecoration = "line-through"
-        tit[index].style.textDecoration = "line-through"       
+        tit[index].style.textDecoration = "line-through"
+        nodeList[index].classList.add("green-status")       
           console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       } else {
@@ -94,6 +96,7 @@ function done(nodeListdone, nodeList, newData) {
         listDone.parentElement.style.textDecoration = ""
         tit[index].style.textDecoration = ""
         des[index].style.textDecoration = ""
+        nodeList[index].classList.remove("green-status") 
         console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       }
@@ -172,3 +175,15 @@ uform.addEventListener("submit", updateSubmit);
 //   console.log("5");
   
 // })
+
+
+function statusCall(nodeList){
+  formSubmittedData.forEach((data,index) => {
+      if(data.isDone == true){
+         nodeList[index].classList.add("green-status")
+     }
+      console.log(data.isDone);
+  })
+}
+
+
