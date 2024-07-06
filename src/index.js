@@ -41,7 +41,7 @@ function render(formSubmittedData){
   formSubmittedData.forEach((data, index) => {
     let list = document.createElement("li");
     list.classList.add("nodeList");
-    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span class="title">${data.title}</span><span class="description">${data.desc}</span><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit">Edit</button><button class="delete">delete</button></span></p>`;
+    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span style = "${data.isDone && "text-decoration: line-through"}" class="title">${data.title}</span><span style = "${data.isDone && "text-decoration: line-through"}" class="description">${data.desc}</span><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button class="delete"><i class="fa-solid fa-trash"></i></button></span></p>`;
     pList.appendChild(list);
     items.push(list);
   });
@@ -64,7 +64,6 @@ function edit(nodeListedit, modify1, modify2) {
     listedit.addEventListener("click", () => {
       console.log(uform);
       currentFormItem = index;
-      listedit.style.backgroundColor = "purple";
       modify1.value = formSubmittedData[index].title;
       modify2.value = formSubmittedData[index].desc;
       uform.classList.add("u-show")
@@ -75,6 +74,8 @@ function edit(nodeListedit, modify1, modify2) {
 
 
 function done(nodeListdone, nodeList, newData) {
+  let des = document.querySelectorAll(".description")
+  let tit = document.querySelectorAll(".title")
   nodeListdone.forEach((listDone, index) => {
     listDone.addEventListener('change',(e)=>{
       // let isDone = formSubmittedData[index]["isDone"]
@@ -83,12 +84,16 @@ function done(nodeListdone, nodeList, newData) {
       formSubmittedData[index]["isDone"] = !e.target.checked;
       if(e.target.checked){
         formSubmittedData[index].isDone = true  
-        listDone.parentElement.style.textDecoration = "line-through"     
+        listDone.parentElement.style.textDecoration = "line-through"
+        des[index].style.textDecoration = "line-through"
+        tit[index].style.textDecoration = "line-through"       
           console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       } else {
         formSubmittedData[index].isDone = false
         listDone.parentElement.style.textDecoration = ""
+        tit[index].style.textDecoration = ""
+        des[index].style.textDecoration = ""
         console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       }
@@ -158,10 +163,10 @@ const updateSubmit = (event) => {
 
 uform.addEventListener("submit", updateSubmit);
 
-document.getElementById("httpSubmit").addEventListener("click", (e) => {
-  e.preventDefault;
-  console.log("updated data" + formSubmittedData);
-});
+// document.getElementById("httpSubmit").addEventListener("click", (e) => {
+//   e.preventDefault;
+//   console.log("updated data" + formSubmittedData);
+// });
 
 // ubtn.addEventListener("click", () => {
 //   console.log("5");
