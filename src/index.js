@@ -41,7 +41,7 @@ function render(formSubmittedData){
   formSubmittedData.forEach((data, index) => {
     let list = document.createElement("li");
     list.classList.add("nodeList");
-    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span style = "${data.isDone && "text-decoration: line-through"}" class="title">${data.title}</span><span style = "${data.isDone && "text-decoration: line-through"}" class="description">${data.desc}</span><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button class="delete"><i class="fa-solid fa-trash"></i></button></span></p>`;
+    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span style = "${data.isDone && "text-decoration: line-through"}" class="title">${data.title}</span><span style = "${data.isDone && "text-decoration: line-through"}" class="description">${data.desc}</span><input class="done style2" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button class="delete"><i class="fa-solid fa-trash"></i></button></span></p>`;
     pList.appendChild(list);
     items.push(list);
   });
@@ -56,7 +56,7 @@ function render(formSubmittedData){
   done(nodeListdone, nodeList, newData);
   deleteList(nodeListdel, formSubmittedData, nodeList, pList);
   console.log(formSubmittedData);
-  statusCall(nodeList)
+  statusBar(nodeList)
   localStorage.setItem("Data",JSON.stringify(formSubmittedData))
 }
 
@@ -177,9 +177,9 @@ uform.addEventListener("submit", updateSubmit);
 // })
 
 
-function statusCall(nodeList){
+function statusBar(nodeList){
   formSubmittedData.forEach((data,index) => {
-      if(data.isDone == true){
+      if(data.isDone){
          nodeList[index].classList.add("green-status")
      }
       console.log(data.isDone);
