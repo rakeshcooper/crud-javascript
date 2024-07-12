@@ -17,7 +17,8 @@ const handleSubmit = (event) => {
   event.preventDefault();
   if (input1.value.length <= 0 || input2.value.length <= 0) {
     console.log(input1.value.length);
-    alert("add details in both the field");
+    // alert("add details in both the field");
+    createToast("warning")
   } else {
     let formData = Object.fromEntries(new FormData(event.currentTarget));
     // formData["isDone"] = false;
@@ -32,6 +33,7 @@ const handleSubmit = (event) => {
     items = [];
     console.log("form-submitted");
     render(formSubmittedData);
+    createToast("add")
     
   }
 };
@@ -69,7 +71,6 @@ function edit(nodeListedit, modify1, modify2) {
       modify2.value = formSubmittedData[index].desc;
       uform.classList.add("u-show")
       ucon.classList.add("u-popup");
-      createToast("success")
     });
   });
 }
@@ -91,7 +92,9 @@ function done(nodeListdone, nodeList, newData) {
         tit[index].style.textDecoration = "line-through"
         nodeList[index].classList.add("green-status")       
           console.log(formSubmittedData);
+          createToast("success")
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+
       } else {
         formSubmittedData[index].isDone = false
         listDone.parentElement.style.textDecoration = ""
@@ -118,6 +121,7 @@ function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
       // debugger
       formSubmittedData.splice(index, 1);
       render(formSubmittedData);
+      createToast("error")
       console.log("After-Deleted :" + formSubmittedData + "index :" + index);
       
     });
@@ -158,6 +162,7 @@ const updateSubmit = (event) => {
     descriptionElement.innerText = obj.desc;
     uform.classList.remove("u-show")
     ucon.classList.remove("u-popup");
+    createToast("info")
   } else {
     throw new Error("No current item selected!");
     
@@ -196,20 +201,24 @@ const toastDetails = {
 	timer: 5000,
 	success: {
 		icon: "fa-circle-check",
-		text: "Success: This is a success toast."
+		text: "Success: Todo successfully completed."
 	},
 	error: {
-		icon: "fa-circle-xmark",
-		text: "Error: This is an error toast."
+		icon: "fa-solid fa-trash",
+		text: "Delete: Todo is deleted."
 	},
 	warning: {
 		icon: "fa-circle-exclamation",
-		text: "Warning: This is a warning toast."
+		text: "Warning: Please add the title and description."
 	},
 	info: {
 		icon: "fa-circle-info",
-		text: "Info: This is an information toast."
-	}
+		text: "Update: Todo is updated."
+	},
+  add:{
+    icon: "fa-circle-check",
+		text: "List: New list is added."
+  }
 }
 
 const removeToast = (toast) => {

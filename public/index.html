@@ -20,6 +20,7 @@
 	    --error: #f24d4c;
 	    --warning: #e9bd0c;
 	    --info: #3498db;
+        --add: rgb(191, 16, 106);
         }
 
 
@@ -388,6 +389,10 @@
 	background: var(--info);
 }
 
+.toast.add::before, .btn#add {
+	background: var(--add);
+}
+
 .toast .column i {
 	font-size: 1.75rem;
 }
@@ -406,6 +411,10 @@
 
 .toast.info .column i {
 	color: var(--info);
+}
+
+.toast.add .column i {
+	color: var(--add);
 }
 
 .toast .column span {
