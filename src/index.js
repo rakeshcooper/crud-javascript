@@ -17,7 +17,8 @@ const handleSubmit = (event) => {
   event.preventDefault();
   if (input1.value.length <= 0 || input2.value.length <= 0) {
     console.log(input1.value.length);
-    alert("add details in both the field");
+    // alert("add details in both the field");
+    createToast("warning")
   } else {
     let formData = Object.fromEntries(new FormData(event.currentTarget));
     // formData["isDone"] = false;
@@ -32,6 +33,7 @@ const handleSubmit = (event) => {
     items = [];
     console.log("form-submitted");
     render(formSubmittedData);
+    createToast("add")
     
   }
 };
@@ -41,7 +43,7 @@ function render(formSubmittedData){
   formSubmittedData.forEach((data, index) => {
     let list = document.createElement("li");
     list.classList.add("nodeList");
-    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span style = "${data.isDone && "text-decoration: line-through"}" class="title">${data.title}</span><span style = "${data.isDone && "text-decoration: line-through"}" class="description">${data.desc}</span><input class="done" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button class="delete"><i class="fa-solid fa-trash"></i></button></span></p>`;
+    list.innerHTML = `<p style = "${data.isDone && "text-decoration: line-through"}"><span style = "${data.isDone && "text-decoration: line-through"}" class="title">${data.title}</span><span style = "${data.isDone && "text-decoration: line-through"}" class="description">${data.desc}</span><input class="done style2" type="checkbox" ${data.isDone ? `checked` : ``}><span class="c-btns"><button class="edit"><i class="fa-solid fa-pen-to-square"></i></button><button class="delete"><i class="fa-solid fa-trash"></i></button></span></p>`;
     pList.appendChild(list);
     items.push(list);
   });
@@ -56,6 +58,7 @@ function render(formSubmittedData){
   done(nodeListdone, nodeList, newData);
   deleteList(nodeListdel, formSubmittedData, nodeList, pList);
   console.log(formSubmittedData);
+  statusBar(nodeList)
   localStorage.setItem("Data",JSON.stringify(formSubmittedData))
 }
 
@@ -86,14 +89,18 @@ function done(nodeListdone, nodeList, newData) {
         formSubmittedData[index].isDone = true  
         listDone.parentElement.style.textDecoration = "line-through"
         des[index].style.textDecoration = "line-through"
-        tit[index].style.textDecoration = "line-through"       
+        tit[index].style.textDecoration = "line-through"
+        nodeList[index].classList.add("green-status")       
           console.log(formSubmittedData);
+          createToast("success")
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
+
       } else {
         formSubmittedData[index].isDone = false
         listDone.parentElement.style.textDecoration = ""
         tit[index].style.textDecoration = ""
         des[index].style.textDecoration = ""
+        nodeList[index].classList.remove("green-status") 
         console.log(formSubmittedData);
         localStorage.setItem("Data",JSON.stringify(formSubmittedData))
       }
@@ -114,6 +121,7 @@ function deleteList(nodeListdel, formSubmittedData, nodeList, pList) {
       // debugger
       formSubmittedData.splice(index, 1);
       render(formSubmittedData);
+      createToast("error")
       console.log("After-Deleted :" + formSubmittedData + "index :" + index);
       
     });
@@ -154,6 +162,7 @@ const updateSubmit = (event) => {
     descriptionElement.innerText = obj.desc;
     uform.classList.remove("u-show")
     ucon.classList.remove("u-popup");
+    createToast("info")
   } else {
     throw new Error("No current item selected!");
     
@@ -172,3 +181,71 @@ uform.addEventListener("submit", updateSubmit);
 //   console.log("5");
   
 // })
+
+
+function statusBar(nodeList){
+  formSubmittedData.forEach((data,index) => {
+      if(data.isDone){
+         nodeList[index].classList.add("green-status")
+     }
+      console.log(data.isDone);
+  })
+}
+
+let $ = document;
+
+const notifications = $.querySelector(".notifications")
+// buttons = $.querySelectorAll(".buttons .btn");
+
+const toastDetails = {
+	timer: 5000,
+	success: {
+		icon: "fa-circle-check",
+		text: "Success: Todo successfully completed."
+	},
+	error: {
+		icon: "fa-solid fa-trash",
+		text: "Delete: Todo is deleted."
+	},
+	warning: {
+		icon: "fa-circle-exclamation",
+		text: "Warning: Please add the title and description."
+	},
+	info: {
+		icon: "fa-circle-info",
+		text: "Update: Todo is updated."
+	},
+  add:{
+    icon: "fa-circle-check",
+		text: "List: New list is added."
+  }
+}
+
+const removeToast = (toast) => {
+	toast.classList.add("hide")
+	if (toast.timeoutId) clearTimeout(toast.timeoutId); // Clearing the timeout for the toast
+	setTimeout(() => toast.remove(), 500) // Removing the toast after 500ms
+}
+
+const createToast = (id) => {
+	// Getting the icon and text for the toast based on the id passed
+	const { icon, text } = toastDetails[id];
+	const toast = $.createElement("li"); // Creating a new 'li' element for the toast
+	toast.className = `toast ${id}` // Setting the classes for the toast
+	// Setting the inner HTML for the toast
+	toast.innerHTML = `<div class="column">
+												<i class="fa-solid ${icon}"></i>
+												<span>${text}</span>
+										</div>
+										<i class="fa-solid fa-xmark" onclick="removeToast(this.parentElement)"></i>`
+	notifications.appendChild(toast); // Append the toast to the notification ul
+	// Setting a timeout to remove the toast after the specified duration
+	toast.timeoutId = setTimeout(() => removeToast(toast), toastDetails.timer)
+}
+
+// Adding a click event listener to each button to create a toast when clicked
+// buttons.forEach(btn => {
+// 	btn.addEventListener("click", () => createToast(btn.id))
+// });
+
+

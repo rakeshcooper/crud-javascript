@@ -13,9 +13,21 @@
             margin: 0;
             box-sizing: border-box; 
         }
+        :root {
+	    --dark: #34495e;
+	    --light: #fff;
+	    --success: #0abf30;
+	    --error: #f24d4c;
+	    --warning: #e9bd0c;
+	    --info: #3498db;
+        --add: rgb(191, 16, 106);
+        }
+
+
         .container{
             position: relative;
             height: 100vh;
+            background-color: lightgray;
         }
         .update-form{
             position: absolute;
@@ -33,7 +45,7 @@
             position: absolute;
             top: 0%;
             left: 50%;
-            transform: translate(-50%,-50%) scale(0.1);
+            transform: translate(-50%,-50%) scale(0);
             padding: 25px 40px;
             background: gainsboro;
             border-radius: 25px;
@@ -112,6 +124,7 @@
             color: #fff;
             padding: 7px 15px;
             border-radius: 5px;
+            cursor: pointer;
         }
 
         #title, #desc{
@@ -164,10 +177,22 @@
         .nodeList{
             width: 900px;
             padding: 15px 25px;
-            background-color: rgba(246, 158, 251, 0.899);
+            background-color: #fff;
             margin: 10px 25px 10px 25px;
             position: relative;
             border-radius: 5px;
+            border-top: 5px solid red;
+            box-shadow: 0 5px 30px 0 rgba(147, 161, 176, .25);
+            transition: all .5s ease;
+        }
+
+        .nodeList:hover{
+            box-shadow: 0 0px 15px 0 rgb(6, 3, 5);
+            transition: all .5s ease;
+        }
+
+        .green-status{
+            border-top: 5px solid rgb(13, 190, 13);
         }
 
         .c-btns{
@@ -214,6 +239,198 @@
             font-size: 18px;
         }
 
+        input[type="checkbox"]:focus{
+            -webkit-tap-highlight-color:rgba(0,0,0,0) !important;
+            }
+            input[type="checkbox"] {
+            -webkit-appearance: none;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            right: -693px;
+            top: 0;
+            bottom: 0;
+            cursor: pointer;
+            outline: none;
+            }
+
+        .style2{
+            height: 17px;
+            width: 34px;
+            background-color: red;
+            border-radius: 45px;
+        }
+.style2:before{
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 3px;
+    background-color: red;
+    border-radius: 50%;
+    top: 2.5px;
+    left: 2px;
+    box-shadow: 10px 0 0 red, 6px 5px 0 6px white;
+    transition: 0.3s;
+}
+.style2:after{
+    content: "";
+    position: absolute;
+    height: 3px;
+    width: 11px;
+    background-color: red;
+    border-radius: 25px 25px 0 0;
+    top: 9px;
+    left: 4px;
+    transition: 0.3s;
+}
+.style2:checked{
+  background-color:rgb(13, 190, 13); 
+}
+.style2:checked:before{
+    left: 17px;
+    background-color: rgb(13, 190, 13);
+    box-shadow: 10px 0 0 rgb(13, 190, 13), 6px 5px 0 6px white;
+}
+
+.style2:checked:after{
+    left: 19px;
+    border-radius: 0 0 25px 25px;
+    background-color: rgb(13, 190, 13); 
+}
+
+/*-----------------------------------*/
+.notifications {
+	position: fixed;
+	top: 30px;
+	right: 20px;
+}
+
+.notifications :where(.toast, .column) {
+	display: flex;
+	align-items: center;
+}
+
+.notifications .toast {
+	width: 400px;
+	position: relative;
+	overflow: hidden;
+	list-style: none;
+	border-radius: 4px;
+	padding: 16px 17px;
+	margin-bottom: 10px;
+	background: var(--light);
+	justify-content: space-between;
+	animation: show_toast 0.3s ease forwards;
+}
+
+@keyframes show_toast {
+	0% {
+		transform: translateX(100%);
+	}
+	40% {
+		transform: translateX(-5%);
+	}
+	80% {
+		transform: translateX(0%);
+	}
+	100% {
+		transform: translateX(-10%);
+	}
+}
+
+.notifications .toast.hide {
+	animation: hide_toast 0.3s ease forwards;
+}
+
+@keyframes hide_toast {
+	0% {
+		transform: translateX(-10%);
+	}
+	40% {
+		transform: translateX(0%);
+	}
+	80% {
+		transform: translateX(-5%);
+	}
+	100% {
+		transform: translateX(calc(100% + 20px));
+	}
+}
+
+.toast::before {
+	position: absolute;
+	content: '';
+	height: 3px;
+	width: 100%;
+	bottom: 0;
+	left: 0;
+	animation: progress 5s linear forwards;
+}
+
+@keyframes progress {
+	100% {
+		width: 0%;
+	}
+}
+
+.toast.success::before, .btn#success {
+	background: var(--success);
+}
+
+.toast.error::before, .btn#error {
+	background: var(--error);
+}
+
+.toast.warning::before, .btn#warning {
+	background: var(--warning);
+}
+
+.toast.info::before, .btn#info {
+	background: var(--info);
+}
+
+.toast.add::before, .btn#add {
+	background: var(--add);
+}
+
+.toast .column i {
+	font-size: 1.75rem;
+}
+
+.toast.success .column i {
+	color: var(--success);
+}
+
+.toast.error .column i {
+	color: var(--error);
+}
+
+.toast.warning .column i {
+	color: var(--warning);
+}
+
+.toast.info .column i {
+	color: var(--info);
+}
+
+.toast.add .column i {
+	color: var(--add);
+}
+
+.toast .column span {
+	font-size: 1.07rem;
+	margin-left: 12px;
+}
+
+.toast i:last-child {
+	color: #aeb0d7;
+	cursor: pointer;
+}
+
+.toast i:last-child:hover {
+	color: var(--dark);
+}
+
     </style>
     <!-- <link rel="stylesheet" href="../src/style.css"> -->
 </head>
@@ -254,6 +471,9 @@
             
         </ul>
         <!-- <button id="httpSubmit">Submit to http</button> -->
+        <ul class="notifications">
+            <!-- li toast -->
+        </ul>
     </div>
 
 
