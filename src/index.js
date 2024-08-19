@@ -138,10 +138,12 @@ const updateSubmit = (event) => {
     let formData = new FormData(event.currentTarget);
     formSubmittedData[currentFormItem].title = formData.get("mtitle");
     formSubmittedData[currentFormItem].desc = formData.get("mdesc");
+    
     let obj = {
       title: formData.get("mtitle"),
       desc: formData.get("mdesc"),
     };
+
     localStorage.setItem("Data",JSON.stringify(formSubmittedData))
 
     console.log(currentFormItem);
@@ -179,7 +181,7 @@ uform.addEventListener("submit", updateSubmit);
 
 // ubtn.addEventListener("click", () => {
 //   console.log("5");
-  
+
 // })
 
 
@@ -247,5 +249,3 @@ const createToast = (id) => {
 // buttons.forEach(btn => {
 // 	btn.addEventListener("click", () => createToast(btn.id))
 // });
-
-
